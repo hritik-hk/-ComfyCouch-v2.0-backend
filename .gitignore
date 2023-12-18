@@ -1,2 +1,7 @@
 node_modules
 .env
+
+# Editor directories and files
+.vscode/*
+test.js
+updatedData.json
