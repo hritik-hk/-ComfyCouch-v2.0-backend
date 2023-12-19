@@ -56,6 +56,7 @@ exports.fetchAllProducts = async (req, res) => {
               thumbnail: "$variants.thumbnail",
               color: "$variants.color",
               price: "$variants.price",
+              rating: "$variants.rating"
             },
           },
           brand: { $first: "$brand" },
