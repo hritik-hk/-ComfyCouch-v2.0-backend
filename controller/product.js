@@ -71,3 +71,71 @@ exports.fetchAllProducts = async (req, res) => {
     res.status(400).json(err);
   }
 };
+
+exports.fetchProductByIds = async (req, res) => {
+  const productId = req.params.productId;
+  const variantId = req.params.variantId;
+
+  try {
+    const product = await Product.findById(productId);
+    const variant = await Product.findOne(
+      { _id: productId, "variants._id": variantId },
+      { "variants.$": 1 }
+    );
+    const data = {
+      productDetail: product,
+      selectedVariant: variant.variants[0],
+    };
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
+exports.updateProduct = async (req, res) => {
+  const { productId } = req.params;
+  const updateFields = req.body;
+
+  try {
+    const updatedProduct = await Product.findOneAndUpdate(
+      { _id: productId },
+      updateFields,
+      { new: true }
+    );
+
+    if (!updatedProduct) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    return res.status(200).json(updatedProduct);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
+
+exports.updateVariant = async (req, res) => {
+  const { productId, variantId } = req.params;
+  const updateFields = req.body;
+
+  try {
+    // Construct an object with the fields to update in the variant
+    const variantUpdate = {};
+    for (const key in updateFields) {
+      variantUpdate[`variants.$.${key}`] = updateFields[key];
+    }
+
+    // Update specific fields of the variant within the product
+    const updatedProduct = await Product.findOneAndUpdate(
+      { _id: productId, "variants._id": variantId },
+      { $set: variantUpdate },
+      { new: true }
+    );
+
+    if (!updatedProduct) {
+      return res.status(404).json({ error: "Product or variant not found" });
+    }
+    return res.status(200).json(updatedProduct);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
