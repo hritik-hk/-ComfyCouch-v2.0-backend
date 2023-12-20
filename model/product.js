@@ -20,7 +20,7 @@ const productSchema = new Schema(
     title: { type: String, required: true },
     brand: { type: String, required: true },
     category: { type: String, required: true },
-    variants:  [{ type: Schema.Types.ObjectId, ref: 'Variant' }],
+    colors:  { type: [Schema.Types.Mixed], required:true },
     productDetails: { type: Object, required: true },
     specifications: { type: Object, required: true },
     customerReviews: { type: [customerReviewSchema], required: true },
