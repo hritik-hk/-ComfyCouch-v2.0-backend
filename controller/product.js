@@ -17,7 +17,7 @@ exports.fetchProductDetailByIds = async (req, res) => {
 
   try {
     const product = await Product.findById(productId);
-    const variant = await Product.findById(variantId);
+    const variant = await Variant.findById(variantId);
     const data = {
       productDetail: product,
       selectedVariant: variant
