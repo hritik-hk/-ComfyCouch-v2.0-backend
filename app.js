@@ -10,6 +10,7 @@ const userRouter=require("./routes/user");
 const authRouter=require("./routes/auth");
 const cartRouter=require("./routes/cart");
 const variantRouter=require("./routes/variant");
+const orderRouter=require("./routes/order");
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use("/user",userRouter.router);
 app.use("/auth",authRouter.router);
 app.use("/cart",cartRouter.router);
 app.use("/variant",variantRouter.router);
+app.use("/order",orderRouter.router);
 
 app.listen(process.env.PORT, () => {
   console.log(`server started at PORT: ${process.env.PORT}`);
