@@ -51,7 +51,6 @@ exports.fetchAllProductVariants = async (req, res) => {
   }
 
   const totalDocs = await totalProductsQuery.count().exec();
-  console.log({ totalDocs });
 
   if (req.query._page && req.query._limit) {
     const pageSize = req.query._limit;
@@ -88,3 +87,15 @@ exports.updateProductVariant = async (req, res) => {
     return res.status(500).json(error);
   }
 };
+
+exports.fetchVariantIdByColor= async(req,res)=>{
+  const {productId,color}=req.params;
+
+  try{
+    const variant_id= await Variant.findOne({product_id:productId,color:color},'_id');
+    res.status(200).json(variant_id);
+
+  }catch(error){
+    res.status(400).json(error);
+  }
+}
