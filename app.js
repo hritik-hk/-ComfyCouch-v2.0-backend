@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require('cors');
-const mongoose = require("mongoose");
+const {connectToDB}= require("./config/mongoose");
 const productRouter = require("./routes/product");
 const brandRouter=require("./routes/brand");
 const categoryRouter=require("./routes/category");
@@ -14,16 +14,11 @@ const orderRouter=require("./routes/order");
 
 const app = express();
 
-const URL = process.env.DB_URL;
+//connect to database
+connectToDB();
 
-app.use(cors());
+app.use(cors());//allows the react app to make HTTP requests to Express application
 app.use(express.json());
-
-async function main() {
-  await mongoose.connect(URL);
-  console.log("connected to database");
-}
-main().catch((err) => console.log(err));
 
 
 app.use("/product", productRouter.router); // "/product" is the base path

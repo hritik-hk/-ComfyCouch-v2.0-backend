@@ -1,5 +1,5 @@
 {
-  "name": "ComfyCouch-backend",
+  "name": "comfycouch-backend",
   "version": "1.0.0",
   "description": "nodejs backend",
   "main": "app.js",
@@ -22,6 +22,8 @@
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "mongoose": "^8.0.2"
+    "mongoose": "^8.0.2",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1"
   }
 }

@@ -5,7 +5,14 @@ exports.createUser = async (req, res) => {
 
   try {
     const doc = await user.save();
-    res.status(201).json(doc);
+    res.status(201).json(
+      {
+        id: doc.id,
+        name: doc.name,
+        email: doc.email,
+        role: doc.role,
+      }
+    );
   } catch (err) {
     res.status(400).json(err);
   }
@@ -20,7 +27,12 @@ exports.loginUser = async (req, res) => {
       if (user.password === req.body.password) {
         res
           .status(200)
-          .json({ id: user.id, name: user.name, email: user.email });
+          .json({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          });
       } else {
         res.status(401).json({ error: "invalid credentials" });
       }
