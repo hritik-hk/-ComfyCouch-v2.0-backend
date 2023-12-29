@@ -16,5 +16,5 @@ function validPassword(password, hash, salt) {
   return crypto.timingSafeEqual(hashedPassword, hash);
 }
 
-module.exports.validPassword = validPassword;
-module.exports.genPassword = genPassword;
+exports.validPassword = validPassword;
+exports.genPassword = genPassword;
