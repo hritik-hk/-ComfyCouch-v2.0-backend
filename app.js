@@ -1,6 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require('cors');
+const passport = require('passport');
+
 const {connectToDB}= require("./config/mongoose");
 const productRouter = require("./routes/product");
 const brandRouter=require("./routes/brand");
@@ -19,6 +21,12 @@ connectToDB();
 
 app.use(cors());//allows the react app to make HTTP requests to Express application
 app.use(express.json());
+
+// Passing the global passport object into the configuration function
+require('./config/passport')(passport);
+
+// this will initialize the passport object on every request
+app.use(passport.initialize());
 
 
 app.use("/product", productRouter.router); // "/product" is the base path
