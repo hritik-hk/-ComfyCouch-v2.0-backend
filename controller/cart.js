@@ -11,7 +11,8 @@ exports.fetchCartByUser = async (req, res) => {
 };
 
 exports.addToCart = async (req, res) => {
-  const cart = new Cart({ ...req.body });
+  const {id}=req.user;
+  const cart = new Cart({ ...req.body,userID:id});
   try {
     const doc = await cart.save();
     res.status(201).json(doc);

@@ -12,7 +12,9 @@ exports.fetchOrdersByUser = async (req, res) => {
   };
   
   exports.createOrder = async (req, res) => {
-    const order = new Order(req.body);
+    const {id}=req.user;
+    
+    const order = new Order({...req.body,user:id});
 
     //update stocks;
     for(let item of order.cartItems){

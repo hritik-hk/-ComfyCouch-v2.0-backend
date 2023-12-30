@@ -11,7 +11,7 @@ const PRIV_KEY = fs.readFileSync(pathToKey, 'utf8');
 function issueJWT(user) {
   const _id = user._id;
 
-  const expiresIn = process.env.expiresIn;
+  const expiresIn =60*60;
 
   const payload = {
     sub: _id
@@ -20,7 +20,7 @@ function issueJWT(user) {
   const signedToken = jsonwebtoken.sign(payload, PRIV_KEY, { expiresIn: expiresIn, algorithm: 'RS256' });
 
   return {
-    token: "Bearer " + signedToken,
+    token: signedToken,
     expires: expiresIn
   }
 }
