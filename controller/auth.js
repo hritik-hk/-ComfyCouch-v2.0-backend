@@ -1,9 +1,17 @@
 const { User } = require("../model/user");
+const {genPassword,validPassword}= require("../utils/passwordUtils");
+const {issueJWT}= require("../utils/jwtUtils");
 
+//register or login
 exports.createUser = async (req, res) => {
-  const user = new User(req.body);
-
   try {
+    const { hash, salt } = genPassword(req.body.password);
+    const user = new User({
+      email:req.body.email,
+      password:hash,
+      salt:salt,
+      name:req.body.name
+    });
     const doc = await user.save();
     res.status(201).json(
       {
@@ -18,26 +26,38 @@ exports.createUser = async (req, res) => {
   }
 };
 
-exports.loginUser = async (req, res) => {
+exports.loginUser = async (req, res, next) => {
+
   try {
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
-      res.status(404).json({ error: "invalid credentials" });
-    } else {
-      if (user.password === req.body.password) {
-        res
-          .status(200)
-          .json({
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-          });
-      } else {
-        res.status(401).json({ error: "invalid credentials" });
-      }
+        return res.status(401).json({ success: false, msg: "user not found" });
     }
-  } catch (error) {
-    res.status(400).json(error);
+    
+    const isValid = validPassword(req.body.password, user.password, user.salt);
+    
+    if (isValid) {
+
+        const tokenObject = issueJWT(user); //issue token/jwt
+
+        res.status(200).json({ success: true, token: tokenObject.token, expiresIn: tokenObject.expires });
+
+    } else {
+
+        res.status(401).json({ success: false, msg: "invalid credentials" });
+
+    }
+  } catch (err) {
+    next(err);
+  }
+
+};
+
+
+exports.checkAuth = async (req, res) => {
+  if (req.user) {
+    res.json(req.user);
+  } else {
+    res.sendStatus(401);
   }
 };

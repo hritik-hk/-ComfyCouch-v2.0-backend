@@ -5,8 +5,8 @@ const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: Buffer, required: true },
   role: { type: String, required: true, default:'user' },
-  addresses: { type: [Schema.Types.Mixed] },
-  name: { type: String },
+  addresses: { type: [Schema.Types.Mixed], required:true},
+  name: { type: String, required:true },
   salt: { type: Buffer, required: true }
 },{timestamps: true});
 
