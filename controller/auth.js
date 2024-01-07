@@ -40,7 +40,7 @@ exports.loginUser = async (req, res, next) => {
 
       res
         .cookie("jwt", token, {
-          maxAge: new Date(Date.now() + expires),
+          maxAge: expires,
           httpOnly: true,
         })
         .status(200)
@@ -54,8 +54,9 @@ exports.loginUser = async (req, res, next) => {
 };
 
 exports.checkAuth = async (req, res) => {
-  if (req.user) {
-    res.json(req.user);
+  if (req.user && req.cookies) {
+    token = req.cookies["jwt"];
+    res.status(200).json({ token: token });
   } else {
     res.sendStatus(401);
   }

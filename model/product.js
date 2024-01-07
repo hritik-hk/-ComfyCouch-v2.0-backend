@@ -17,7 +17,7 @@ const customerReviewSchema = new Schema(
 
 const productSchema = new Schema(
   {
-    title: { type: String, required: true },
+    title: { type: String, required: true, unique: true },
     brand: { type: String, required: true },
     category: { type: String, required: true },
     colors:  { type: [Schema.Types.Mixed], required:true },

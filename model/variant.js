@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const variantSchema = new Schema(
   {
-    product_id:{ type: Schema.Types.ObjectId, required: true },
+    product_id:{ type: Schema.Types.ObjectId, required: true, unique: true },
     title: { type: String, required: true },
     thumbnail: { type: String, required: true },
     images: { type: [String], required: true },
