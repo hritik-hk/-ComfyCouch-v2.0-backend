@@ -16,6 +16,7 @@ const cartRouter = require("./routes/cart");
 const variantRouter = require("./routes/variant");
 const orderRouter = require("./routes/order");
 const { isAuth } = require("./middleware/authMiddleware");
+const {Order} = require("./model/order");
 
 const app = express();
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
@@ -23,7 +24,46 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 //connect to database
 connectToDB();
 
-//middlewares
+//webhook
+
+// webhook endpoint secret key
+const endpointSecret = process.env.ENDPOINT_SECRET;
+
+app.post('/webhook', express.raw({type: 'application/json'}), async (request, response) => {
+  const sig = request.headers['stripe-signature'];
+
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
+  } catch (err) {
+    response.status(400).send(`Webhook Error: ${err.message}`);
+    return;
+  }
+
+  //handling the event
+  switch (event.type) {
+    //handling event
+    case 'checkout.session.completed':
+      const checkoutSessionCompleted = event.data.object;
+      const order = await Order.findById(
+        checkoutSessionCompleted.metadata.orderId
+      );
+      order.paymentStatus = checkoutSessionCompleted.payment_status;
+      await order.save();
+    
+      break;
+    // ... handle other event types
+    default:
+      console.log(`Unhandled event type ${event.type}`);
+  }
+
+  // returning a 200 response to acknowledge receipt of the event
+  response.sendStatus(200);
+});
+
+
+//middlewares-------
 
 app.use(
   cors({ //allows the react app to make HTTP requests to Express application
@@ -73,6 +113,9 @@ app.post("/create-checkout-session", isAuth(), async (req, res) => {
         };
       }),
       mode: "payment",
+      metadata: {
+        orderId:orderId
+      },
       success_url: `http://localhost:8080/order-success/${orderId}`,
       cancel_url: "http://localhost:8080/cart",
     });
