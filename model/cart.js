@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const cartSchema = new Schema({
-  title: { type: String, required: true, unique: true },
+  title: { type: String, required: true},
   productID: { type: Schema.Types.ObjectId, required: true },
   variantID: { type: Schema.Types.ObjectId, required: true },
   thumbnail: { type: String, required: true },

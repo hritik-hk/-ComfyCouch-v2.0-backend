@@ -13,12 +13,7 @@ exports.createUser = async (req, res) => {
       name: req.body.name,
     });
     const doc = await user.save();
-    res.status(201).json({
-      id: doc.id,
-      name: doc.name,
-      email: doc.email,
-      role: doc.role,
-    });
+    res.status(201).json({msg:"user created"});
   } catch (err) {
     res.status(400).json(err);
   }
