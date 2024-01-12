@@ -80,7 +80,7 @@ require("./config/passport")(passport);
 // this will initialize the passport object on every request
 app.use(passport.initialize());
 
-app.use("/api/product", isAuth(), productRouter.router); // "/product" is the base path
+app.use("/api/product", productRouter.router); // "/product" is the base path
 app.use("/api/brand", brandRouter.router);
 app.use("/api/category", categoryRouter.router);
 app.use("/api/color", colorRouter.router);

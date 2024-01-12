@@ -28,7 +28,7 @@ exports.loginUser = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
-      return res.status(401).json({ success: false, msg: "user not found" });
+      return res.status(401).json({ success: false, msg: "invalid credentials" });
     }
 
     const isValid = validPassword(req.body.password, user.password, user.salt);
