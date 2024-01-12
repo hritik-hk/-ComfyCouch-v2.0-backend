@@ -53,6 +53,15 @@ exports.loginUser = async (req, res, next) => {
   }
 };
 
+exports.logout = async (req, res) => {
+  res
+    .cookie('jwt', null, {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+    })
+    .sendStatus(200)
+};
+
 exports.checkAuth = async (req, res) => {
   if (req.user && req.cookies) {
     token = req.cookies["jwt"];

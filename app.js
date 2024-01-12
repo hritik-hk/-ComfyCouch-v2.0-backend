@@ -24,7 +24,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 //connect to database
 connectToDB();
 
-//webhook
+//webhook-------------------------------------
 
 // webhook endpoint secret key
 const endpointSecret = process.env.ENDPOINT_SECRET;
@@ -71,7 +71,7 @@ app.use(
   })
 );
 app.use(express.json());
-app.use(express.static("dist"));
+app.use(express.static(path.resolve(__dirname, "dist")));
 app.use(cookieParser());
 
 // Passing the global passport object into the configuration function
@@ -81,13 +81,13 @@ require("./config/passport")(passport);
 app.use(passport.initialize());
 
 app.use("/api/product", isAuth(), productRouter.router); // "/product" is the base path
-app.use("/api/brand", isAuth(), brandRouter.router);
-app.use("/api/category", isAuth(), categoryRouter.router);
-app.use("/api/color", isAuth(), colorRouter.router);
+app.use("/api/brand", brandRouter.router);
+app.use("/api/category", categoryRouter.router);
+app.use("/api/color", colorRouter.router);
 app.use("/api/user", isAuth(), userRouter.router);
 app.use("/api/auth", authRouter.router);
 app.use("/api/cart", isAuth(), cartRouter.router);
-app.use("/api/variant", isAuth(), variantRouter.router);
+app.use("/api/variant", variantRouter.router);
 app.use("/api/order", isAuth(), orderRouter.router);
 
 //to make react router work in case of other routes doesnt match
