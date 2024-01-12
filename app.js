@@ -116,8 +116,8 @@ app.post("/create-checkout-session", isAuth(), async (req, res) => {
       metadata: {
         orderId:orderId
       },
-      success_url: `http://localhost:8080/order-success/${orderId}`,
-      cancel_url: "http://localhost:8080/cart",
+      success_url: `https://comfycouch.vercel.app/order-success/${orderId}`,
+      cancel_url: "https://comfycouch.vercel.app/cart",
     });
 
     res.send({ url: session.url });
