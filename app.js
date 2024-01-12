@@ -29,7 +29,7 @@ connectToDB();
 // webhook endpoint secret key
 const endpointSecret = process.env.ENDPOINT_SECRET;
 
-app.post('/webhook', express.raw({type: 'application/json'}), async (request, response) => {
+app.post('/webhook', app.raw({type: 'application/json'}), async (request, response) => {
   const sig = request.headers['stripe-signature'];
 
   let event;
