@@ -21,15 +21,12 @@ const {Order} = require("./model/order");
 const app = express();
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-//connect to database
-connectToDB();
-
 //webhook-------------------------------------
 
 // webhook endpoint secret key
 const endpointSecret = process.env.ENDPOINT_SECRET;
 
-app.post('/webhook', app.raw({type: 'application/json'}), async (request, response) => {
+app.post('/webhook', express.raw({type: 'application/json'}), async (request, response) => {
   const sig = request.headers['stripe-signature'];
 
   let event;
@@ -61,6 +58,9 @@ app.post('/webhook', app.raw({type: 'application/json'}), async (request, respon
   // returning a 200 response to acknowledge receipt of the event
   response.sendStatus(200);
 });
+
+//connect to database
+connectToDB();
 
 
 //middlewares-------
